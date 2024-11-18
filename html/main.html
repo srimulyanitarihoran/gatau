@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Adventure</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000428;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #FFFFFF;
+            position: relative;
+        }
+
+        /* Background Gradient Animation */
+        @keyframes galaxyMovement {
+            0% { background: linear-gradient(45deg, #020024, #090979, #00d4ff); }
+            50% { background: linear-gradient(45deg, #0d1b2a, #2c3e50, #1cb5e0); }
+            100% { background: linear-gradient(45deg, #020024, #090979, #00d4ff); }
+        }
+
+        /* Planet Animation */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.9;
+            animation: floatPlanet 10s ease-in-out infinite;
+        }
+
+        /* Individual Planets */
+        .sun { width: 150px; height: 150px; background: radial-gradient(circle, #FFD700, #FFA500); top: 10%; left: 5%; }
+        .mars { width: 80px; height: 80px; background: radial-gradient(circle, #ff6b6b, #b22222); bottom: 15%; right: 10%; }
+        .neptune { width: 100px; height: 100px; background: radial-gradient(circle, #1e90ff, #000080); bottom: 5%; left: 15%; }
+        .saturn {
+            width: 120px; height: 120px; background: radial-gradient(circle, #d4a017, #8b4513);
+            top: 40%; left: 60%;
+        }
+        /* Saturn Ring */
+        .saturn::before {
+            content: "";
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 180px; height: 40px;
+            background: rgba(218, 165, 32, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotate(25deg);
+        }
+
+        /* Floating Animation */
+        @keyframes floatPlanet {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Astronaut Animation */
+        .astronaut {
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            width: 150px;
+            transform: translate(-50%, -50%);
+            animation: floatAstronaut 6s ease-in-out infinite;
+        }
+
+        @keyframes floatAstronaut {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0); }
+            50% { transform: translate(-50%, -60%) rotate(15deg); }
+        }
+
+        /* Title and Subtitle */
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        /* Button Animation */
+        .explore-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            background-color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(255, 107, 107, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: pulsate 1.5s ease-in-out infinite;
+        }
+
+        /* Show Animation for Message Frame */
+        #messageFrame {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 350px;
+            padding: 25px;
+            background-color: rgba(0, 0, 50, 0.9);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s ease, display 0s 0.5s;
+        }
+
+        /* Close Button */
+        #closeButton {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #closeButton:hover {
+            background-color: #ff8787;
+        }
+
+        /* Show Another Message Button */
+        #showAnotherButton {
+            margin-left: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            background-color: #ff6b6b;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            animation: beat 1s infinite;
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Star Animation */
+        .star {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: moveStar 10s linear infinite;
+        }
+
+        @keyframes moveStar {
+            0% {
+                transform: translateX(-100vw) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(0);
+                opacity: 0;
+            }
+        }
+
+        /* Bouncing Button Animation */
+        @keyframes pulsate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+           /* Pesan terakhir yang lebih besar */
+           #finalMessageFrame {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 400px;
+            padding: 30px;
+            background-color: rgba(0, 0, 50, 0.9);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s ease, display 0s 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Planets -->
+    <div class="planet sun"></div>
+    <div class="planet mars"></div>
+    <div class="planet neptune"></div>
+    <div class="planet saturn"></div>
+
+    <!-- Astronaut Floating -->
+    <img src="https://cdn-icons-png.flaticon.com/512/744/744832.png" alt="Astronot" class="astronaut">
+
+    <!-- Title and Subtitle -->
+    <h1>Only For You</h1>
+
+    <!-- Button -->
+    <button class="explore-button" id="showMessageButton">Klik Pliss</button>
+
+    <!-- Message Frame -->
+    <div id="messageFrame" class="hidden">
+        <div class="frame-content">
+            <p id="messageContent">Baca Yaa! 🌟</p>
+            <button id="closeButton">Close</button>
+            <button id="showAnotherButton">lagi</button> <!-- Jantung berdetak -->
+        </div>
+    </div>
+
+    <!-- Moving Stars -->
+    <div id="starsContainer"></div>
+       <!-- Frame Pesan Terakhir -->
+       <div id="finalMessageFrame">
+        <div class="frame-content">
+            <p>kalo di liat liat kita emang ga cocok , ga sefrekuensi , lebih banyak diem padahal lagi nongkrong , tapi walopun kaya gitu jangan jadiin itu halangan buat kita temenan atau deket ya , karna aku uda seneng ko kalo main sama kamu nongkrong sama kamu walopun diem (anjaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaay) (malu critanya) , ya pokonya gitu la , ya intinya gitu la , pokonya uda gitu aja la</p>
+            <button onclick="closeFinalMessage()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to create moving stars
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = Math.random() * 100 + 'vh'; // Random vertical position
+            star.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+            star.style.animationDuration = (Math.random() * 5 + 5) + 's'; // Random speed between 5s to 10s
+            document.getElementById('starsContainer').appendChild(star);
+
+            // Remove star after animation ends
+            star.addEventListener('animationend', () => {
+                star.remove();
+            });
+        }
+
+        // Create stars every 300ms
+        setInterval(createStar, 300);
+
+        // Show Message Frame with initial message
+        document.getElementById('showMessageButton').onclick = () => {
+            document.getElementById('messageFrame').style.display = 'block';
+            document.getElementById('messageFrame').style.transform = 'translate(-50%, -50%) scale(1)';
+        };
+
+        // Show another message when the jantung button is clicked
+        document.getElementById('showAnotherButton').onclick = () => {
+            const messages = [
+                "kita ga cocok , tapi aku maksain cocok",
+                "kita ga sefrekuensi , tapi aku maksain",
+                "aku ga pernah dan susah buat punya topik tapi aku maksain",
+                "tapi sumpa ya"
+            ];
+
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            document.getElementById('messageContent').textContent = messages[randomIndex];
+        };
+
+        // Close the message frame
+        document.getElementById('closeButton').onclick = () => {
+            document.getElementById('messageFrame').style.transform = "translate(-50%, -50%) scale(0)";
+            setTimeout(() => {
+                document.getElementById('messageFrame').style.display = "none";
+            }, 500); // Delay hiding the frame until the animation is done
+        };
+         // Tambahkan logika untuk tombol terakhir
+         document.getElementById('showAnotherButton').onclick = () => {
+            const messages = [
+                "kita ga cocok , tapi aku maksain cocok",
+                "kita ga sefrekuensi , tapi aku maksain",
+                "aku ga pernah dan susah buat punya topik tapi aku maksain",
+                "tapi sumpa ya"
+            ];
+
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            const messageContent = document.getElementById('messageContent');
+            messageContent.textContent = messages[randomIndex];
+
+            // Jika pesan terakhir sudah tampil, ganti tombol
+            if (messageContent.textContent === "tapi sumpa ya") {
+                document.getElementById('showAnotherButton').style.display = 'none';
+                
+                // Tambahkan tombol terakhir
+                const finalButton = document.createElement('button');
+                finalButton.id = 'finalButton';
+                finalButton.textContent = "terakhir";
+                finalButton.style.marginLeft = "10px";
+                finalButton.style.padding = "10px";
+                finalButton.style.border = "none";
+                finalButton.style.borderRadius = "10px";
+                finalButton.style.backgroundColor = "#ff6b6b";
+                finalButton.style.color = "white";
+                finalButton.style.cursor = "pointer";
+                finalButton.onclick = () => showFinalMessage();
+                document.querySelector('.frame-content').appendChild(finalButton);
+            }
+        };
+
+        // Fungsi menampilkan pesan terakhir
+        function showFinalMessage() {
+            document.getElementById('finalMessageFrame').style.display = 'block';
+            document.getElementById('finalMessageFrame').style.transform = 'translate(-50%, -50%) scale(1)';
+        }
+
+        // Fungsi menutup pesan terakhir
+        function closeFinalMessage() {
+            document.getElementById('finalMessageFrame').style.transform = "translate(-50%, -50%) scale(0)";
+            setTimeout(() => {
+                document.getElementById('finalMessageFrame').style.display = "none";
+            }, 500); // Delay untuk animasi selesai
+        }
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>

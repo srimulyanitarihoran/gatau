@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teman Terbaik</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1c1c1c, #333);
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        .heading {
+            font-size: 3em;
+            color: #e0e0e0;
+            text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .reveal-button {
+            background-color: #444;
+            color: #fff;
+            border: 2px solid #777;
+            padding: 15px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .reveal-button:hover {
+            background-color: #555;
+            border-color: #999;
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .modal-content {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            width: 150%; /* Lebar horizontal lebih besar */
+            max-width: 1000px;
+            color: #fff;
+            font-size: 1.2em;
+            position: relative;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        .message-text {
+            margin-top: 10px;
+            white-space: pre-wrap; /* Membungkus teks */
+            overflow-wrap: break-word; /* Memastikan kata panjang tetap wrap */
+        }
+
+        .next-button {
+            display: none;
+            margin-top: 20px;
+            background-color: #444;
+            color: #fff;
+            border: 2px solid #777;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .next-button:hover {
+            background-color: #555;
+            border-color: #999;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Only For You✨💫</h1>
+        <button class="reveal-button" onclick="showMessage()">Baca Yaaa</button>
+        <div class="modal" id="messageModal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeMessage()">&times;</span>
+                <p class="message-text" id="messageText"></p>
+                <button class="next-button" id="nextButton" onclick="showNextMessage()">Next</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const firstMessage = "kita ga cocok, tapi aku maksain cocok. kita ga sefrekuensi, tapi aku maksain sefrekuensi. aku ga pernah punya topik atau mungkin susah banget buat nyari topik, tapi aku maksain. sebenernya aku dah sadar dari awal si, dari awal kita main di ayunan juga aku uda sadar kaya 'aku sama dia ga cocok', tapi aku ga bakal maksa kalau bukan karna aku nyaman atau emang pengen deket atau main sama kamu (malu anjay), apaya, pengen ngomong apaya, padahal uda ada coi kata kata nya, tapi tiba tiba banget gitu lupa, ngomong apa aja lah ya, yang pengen di omongin, apayaaa, nih ya, aku terbuka nih sama kamu, hemm, tentang terbuka sama kamu, sebenernya aku mau ko terbuka sama kamu, mau banget malah, kaya aku mau nyeritain di saat aku lagi sedih, aku mau nyeritain di saat aku seneng, aku mau nyeritain semuanya di setiap kondisi aku (anjay, gila malu banget), ya, pokonya aku mau terbuka dan nyeritain semua yang lagi aku alamin, cuman ya, ada satu hal yang bikin aku belum bisa terbuka sama kamu, hal kecil si, tapi ya gitulah, nih ya, aku keluarin unek unek aku juga ya, terbuka ni aku ni, kamu inget ga? yang kata kita lagi diem diem an, hari jum'at, abis beauty class, itu aku lagi sama si sabrina, trus, sabrina suruh karin kesini, ketempat aku sama sabrina, suruh tarik gitu, yauda kan, aku juga ga betah diem diem an kaya gini terus, aku samperin lah kamu, trus kamu bilang 'gausa sokab', itu kaya langsung 'anjayy,ini serius dia ngomong gituu,gila gila', kaya, iya si, aku salah, knapa juga aku tiba tiba sokab, tapi kan aku sokab ya, aku cape juga diem gajelas, aku tau aku egois, ya karna aku tau and sadar kalo aku egois, aku turunin dengan aku sokab, tapi malah di jawab gituu,yauda jadikan kaya, aku juga bingung harus masang muka kaya gimana, disisi lain aku emang salah, tapi disisi lain juga aku kaya 'anjing, dia mikir gasi ngomong gitu, dia sadar gasi', gitu coi, tapi yaudalah, aku yagitu, trus malemnya nih ya,aku sama sabrina nongkrong, trus kita liat kamu, ya karna kita biasanya nongkrong betiga, yaudala, kita ngajak kamu, aku bilang 'eh, karin, sini nongkrong', trus kamu mala jawab 'ngapain? kan gada yang mau di omongin', itu sumpa, itu ma kaya, 'anjing, gila coi, ni anak kenapa', biasanya kita nongkrong juga ga ngomongin apa apa, tapi seru seru aja, bagi aku si, serunya bukan karna aku ngobrol sama sabrina doang ko, ya seru karna ada kamu juga, biasanya juga kita ngerendem betiga, seru ko, kaya 'aku ga bakal ngajak, kalo bukan karna aku nyaman deket ma kamu anjay, kaya, apasii',";
+        const secondMessage = `na abistu, ya, udala, gitu intinya. biasanya kalo ada pertemanan yang ga cocok atau ga sefrekuensi, ga bakal betahan lama, makanya aku maksain, karna aku gamau cuma karna ga cocok atau ga sefrekuensi masa kita ga temenan lagi, oiya, yang tentang, gabalik pas holakoh, aku mau ko balik, mau banget coi malahan, cuma, pas aku mau balik tu, kamu lagi ngobrol sama kanza, atau keysha, atau qonita, atau yang lain, sebenernya aku its oke (anjay, da ke apaan tau), cuma kalo aku balik, kamu lagi ngobrol, aku jadi kaya ga nyaman, maksudnya jadi gimana gimana gitu loh, karna, kamu sama mereka seru banget, tapi kamu sama aku malah kaya murung mulu gitu lo anjayy, ya aku jadi ga enak la,maksudnya kaya, yagituu, trus, perna, kamu lagi ga ngobrol sama siapa siapa, aku gamau balik karna, anjay,ngerti la, jadi kadang tu kalo aku ngeliat kamu asik ngobrol ama yang lain, yang aku pikirin tu kaya cuma 'anjir, se ga cocok itu kah??', gitu anjayy, uda si itu ajaa, aku harap ke ga cocokan kita atau ke ga sefrekuensi an kita ga bikin pertemanan kita ini jadi suatu halangan, btw aku nulis ini mikir panjang dulu anjay, karna mikir respon kamu bakal gimana, pasti abis baca ini kamu jadi kaya 'apasi anjai ni orang', pasti kamu kaya risih ato ilfeel gitu kan??, gatau sii, dalah, intinya gitu, bingung gitu loh, nutupnya gimana, yauda, dadahhh👋🏻✨`;
+
+        let index = 0;
+        const typingSpeed = 50; // Kecepatan mengetik dalam milidetik
+
+        function typeMessage(message, elementId, callback) {
+            const messageText = document.getElementById(elementId);
+            if (index < message.length) {
+                messageText.textContent += message.charAt(index);
+                index++;
+                setTimeout(() => typeMessage(message, elementId, callback), typingSpeed);
+            } else if (callback) {
+                callback();
+            }
+        }
+
+        function showMessage() {
+            document.getElementById("messageModal").style.display = "flex";
+            index = 0; // Reset indeks
+            document.getElementById("messageText").textContent = ""; // Kosongkan teks
+            document.getElementById("nextButton").style.display = "none"; // Sembunyikan tombol Lanjut
+            typeMessage(firstMessage, "messageText", () => {
+                document.getElementById("nextButton").style.display = "block"; // Tampilkan tombol Lanjut
+            });
+        }
+
+        function showNextMessage() {
+            index = 0; // Reset indeks
+            document.getElementById("messageText").textContent = ""; // Kosongkan teks
+            document.getElementById("nextButton").style.display = "none"; // Sembunyikan tombol Lanjut
+            typeMessage(secondMessage, "messageText");
+        }
+
+        function closeMessage() {
+            document.getElementById("messageModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

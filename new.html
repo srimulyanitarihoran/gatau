@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pick the Darkest Color</title>
+  <style>
+    body {
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(to bottom, #1e272e, #485460);
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #ff4757;
+      text-shadow: 2px 2px 4px #2f3542;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #ffa502;
+    }
+
+    p {
+      font-size: 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 30px auto;
+      background: #2f3640;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .color-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .color-box:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      color: #ff6b81;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #3742fa;
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      background-color: #5352ed;
+    }
+
+    #next-level-box {
+  display: none; /* Awalnya disembunyikan */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8); /* Tambahkan latar belakang gelap semi-transparan (opsional) */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#next-level-box button {
+  padding: 10px 20px;
+  font-size: 18px;
+  color: white;
+  background-color: #4caf50; /* Hijau */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#next-level-box button:hover {
+  background-color: #45a049; /* Warna hijau lebih gelap saat hover */
+}
+
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1>Pick the Darkest Color</h1>
+  <h2>Level: <span id="level">1</span></h2>
+  <p>Time Left: <span id="timer">10</span> seconds</p>
+  <div class="grid" id="grid"></div>
+  <div id="message"></div>
+  <button id="restart" style="display: none;">Restart</button>
+  
+  <div id="next-level-box">
+    <button onclick="window.location.href='index.html'">Lanjut</button>
+  </div>
+
+  <audio id="background-sound" src="https://freesound.org/data/previews/566/566847_11663453-lq.mp3" loop></audio>
+  <audio id="correct-sound" src="https://freesound.org/data/previews/522/522104_10568751-lq.mp3"></audio>
+  <audio id="wrong-sound" src="https://freesound.org/data/previews/522/522117_10568751-lq.mp3"></audio>
+  <audio id="win-sound" src="https://freesound.org/data/previews/522/522108_10568751-lq.mp3"></audio>
+  <audio id="click-sound" src="https://freesound.org/data/previews/523/523273_10568751-lq.mp3"></audio>
+
+  <script>
+    const grid = document.getElementById("grid");
+    const levelDisplay = document.getElementById("level");
+    const timerDisplay = document.getElementById("timer");
+    const message = document.getElementById("message");
+    const restartButton = document.getElementById("restart");
+    const nextLevelBox = document.getElementById("next-level-box");
+
+    const backgroundSound = document.getElementById("background-sound");
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("wrong-sound");
+    const winSound = document.getElementById("win-sound");
+    const clickSound = document.getElementById("click-sound");
+
+    let level = 1;
+    let timer;
+    let timeLeft = 10;
+
+    backgroundSound.volume = 0.3; // Set sound volume
+    backgroundSound.play();
+
+    function generateRandomColor() {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return { r, g, b };
+    }
+
+    function generateColorString({ r, g, b }) {
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function adjustColor({ r, g, b }, adjustment) {
+      return { 
+        r: Math.max(r - adjustment, 0), 
+        g: Math.max(g - adjustment, 0), 
+        b: Math.max(b - adjustment, 0) 
+      };
+    }
+
+    function startGame() {
+      grid.innerHTML = "";
+      message.textContent = "";
+      restartButton.style.display = "none";
+      nextLevelBox.style.display = "none";
+
+      const baseColor = generateRandomColor();
+      const adjustment = Math.max(5, 50 - level * 4);
+      const darkerColor = adjustColor(baseColor, adjustment);
+
+      const totalBoxes = 16;
+      const darkBoxIndex = Math.floor(Math.random() * totalBoxes);
+
+      for (let i = 0; i < totalBoxes; i++) {
+        const box = document.createElement("div");
+        box.classList.add("color-box");
+        box.style.backgroundColor = i === darkBoxIndex ? generateColorString(darkerColor) : generateColorString(baseColor);
+
+        box.addEventListener("click", () => {
+          clickSound.play();
+          if (i === darkBoxIndex) {
+            handleCorrect();
+          } else {
+            handleGameOver();
+          }
+        });
+
+        grid.appendChild(box);
+      }
+
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = 10 - Math.floor(level / 2);
+      timerDisplay.textContent = timeLeft;
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          handleGameOver();
+        }
+      }, 1000);
+    }
+
+    function handleCorrect() {
+      clearInterval(timer);
+      correctSound.play();
+      if (level === 10) {
+        winSound.play();
+        message.textContent = "🎉 Congratulations! You completed all levels!";
+        nextLevelBox.style.display = "block";
+      } else {
+        level++;
+        levelDisplay.textContent = level;
+        startGame();
+      }
+    }
+
+    function handleGameOver() {
+      clearInterval(timer);
+      wrongSound.play();
+      message.textContent = "❌ Game Over! Time's up or wrong color!";
+      restartButton.style.display = "block";
+    }
+
+    restartButton.addEventListener("click", () => {
+      level = 1;
+      levelDisplay.textContent = level;
+      startGame();
+    });
+
+    startGame();
+  </script>
+</body>
+</html>
